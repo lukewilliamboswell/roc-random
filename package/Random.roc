@@ -17,6 +17,8 @@ module [
     i32,
     int,
     chain,
+    map,
+    static,
     next,
     seed,
     seedVariant,
@@ -134,6 +136,16 @@ chain = \firstGenerator, secondGenerator, combiner ->
         { value: second, state: state3 } = secondGenerator state2
 
         { value: combiner first second, state: state3 }
+
+map : Generator uint a, (a -> b) -> Generator uint b
+map = \g, f ->
+    \state ->
+        { value, state: state2 } = g state
+        { value: f value, state: state2 }
+
+static : value -> Generator uint value
+static = \value ->
+    \state -> { value, state }
 
 ## Generate a new [Generation] from an old [Generation]'s state
 next : Generation uint *, Generator uint value -> Generation uint value
